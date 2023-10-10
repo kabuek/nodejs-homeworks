@@ -34,7 +34,8 @@ const removeContact = async (contactId) => {
 
 const addContact = async (body) => {
   const { name, email, phone } = body;
-  if (validateAddNew({ name, email, phone }).error) return validateAddNew({ name, email, phone }).error.details[0].message;
+  const validationReq = validateAddNew({ name, email, phone });
+  if (validationReq.error) return validationReq.error.details[0].message;
   const newContact = {
     id: uniqid(),
     name: name,
@@ -50,10 +51,9 @@ const addContact = async (body) => {
 
 const updateContact = async (contactId, body) => {
   const { name, email, phone } = body;
-  // Check if have any field
   if (Object.keys(body).length === 0) return "missed fields";
-  // Validating fields that haven(fields are not required)
-  if (validateUpdate({ name, email, phone }).error) return validateUpdate({ name, email, phone }).error.details[0].message;
+  const validationReq = validateUpdate({ name, email, phone });
+  if (validationReq.error) return validationReq.error.details[0].message;
 
   let contactsList = await fs.readFile(contactsPath, "utf-8");
   contactsList = JSON.parse(contactsList);
