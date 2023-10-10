@@ -1,9 +1,12 @@
 const fs = require("fs/promises");
 const path = require("path");
 const uniqid = require("uniqid");
-const schema = require(path.join(__dirname, "../schema.js"));
-const validateItems = ({ name, email, phone }) => {
-  return schema.validate({ name: name, email: email, phone: phone });
+const { addNew, update } = require(path.join(__dirname, "../schema.js"));
+const validateAddNew = ({ name, email, phone }) => {
+  return addNew.validate({ name: name, email: email, phone: phone });
+};
+const validateUpdate = ({ name, email, phone }) => {
+  return update.validate({ name: name, email: email, phone: phone });
 };
 
 const contactsPath = path.join(__dirname, "/contacts.json");
@@ -31,8 +34,7 @@ const removeContact = async (contactId) => {
 
 const addContact = async (body) => {
   const { name, email, phone } = body;
-  if (!name || !email || !phone) return "missing required name field";
-  if (validateItems({ name, email, phone }).error) return validateItems({ name, email, phone }).error.details[0].message;
+  if (validateAddNew({ name, email, phone }).error) return validateAddNew({ name, email, phone }).error.details[0].message;
   const newContact = {
     id: uniqid(),
     name: name,
@@ -48,8 +50,8 @@ const addContact = async (body) => {
 
 const updateContact = async (contactId, body) => {
   const { name, email, phone } = body;
-  if (!name && !email && !phone) return "missed fields";
-  if (validateItems({ name, email, phone }).error) return validateItems({ name, email, phone }).error.details[0].message;
+  if (Object.keys(body).length === 0) return "missed fields";
+  if (validateUpdate({ name, email, phone }).error) return validateUpdate({ name, email, phone }).error.details[0].message;
 
   let contactsList = await fs.readFile(contactsPath, "utf-8");
   contactsList = JSON.parse(contactsList);

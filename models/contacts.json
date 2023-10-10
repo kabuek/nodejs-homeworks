@@ -68,7 +68,13 @@
   {
     "id": "g2pc673clnj1fnrn",
     "name": "updated name",
-    "email": "updatedEmail111@gmail.com",
-    "phone": "55585858"
+    "email": "test@gmail.com",
+    "phone": "1234454422"
+  },
+  {
+    "id": "g2pc6894lnjwikjb",
+    "name": "new contact1123",
+    "email": "newEmail@gmail.com",
+    "phone": "5558585822"
   }
 ]
