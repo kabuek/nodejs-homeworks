@@ -50,7 +50,9 @@ const addContact = async (body) => {
 
 const updateContact = async (contactId, body) => {
   const { name, email, phone } = body;
+  // Check if have any field
   if (Object.keys(body).length === 0) return "missed fields";
+  // Validating fields that haven(fields are not required)
   if (validateUpdate({ name, email, phone }).error) return validateUpdate({ name, email, phone }).error.details[0].message;
 
   let contactsList = await fs.readFile(contactsPath, "utf-8");
