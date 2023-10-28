@@ -1,10 +1,13 @@
 const express = require("express");
 const contactController = require("../../controllers/contacts");
+const auth = require("../../middlewares/auth");
 
 const router = express.Router();
 
+router.use(auth);
+
 router.get("/", async (req, res, next) => {
-  const contactsList = await contactController.listContacts();
+  const contactsList = await contactController.listContacts(req.query);
   res.status(200).json(contactsList);
 });
 
