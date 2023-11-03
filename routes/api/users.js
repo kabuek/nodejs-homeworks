@@ -1,5 +1,6 @@
 const express = require("express");
 const userController = require("../../controllers/users");
+const upload = require("../../middlewares/uploadFile");
 
 const router = express.Router();
 
@@ -25,6 +26,11 @@ router.post("/current", async (req, res, next) => {
 
 router.patch("/", async (req, res, next) => {
   const result = await userController.update(req);
+  res.status(result.code).json(result.data);
+});
+
+router.patch("/avatars", upload.single("avatar"), async (req, res, next) => {
+  const result = await userController.updateAvatar(req);
   res.status(result.code).json(result.data);
 });
 
