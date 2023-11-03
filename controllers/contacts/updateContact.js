@@ -1,18 +1,17 @@
 const Contact = require("../../models/contact");
 
-const updateContact = async (contactId, body) => {
+const updateContact = async (contactId, body, user) => {
   try {
     const { name, email, phone } = body;
     if (Object.keys(body).length === 0) return "missed fields";
-    //   const validationReq = validateUpdate({ name, email, phone });
-    //   if (validationReq.error) return validationReq.error.details[0].message;
 
+    const userId = user.id;
     const contactData = {
       name,
       email,
       phone,
     };
-    const updatedContact = await Contact.findByIdAndUpdate(contactId, contactData, { new: true });
+    const updatedContact = await Contact.findOneAndUpdate({ _id: contactId, owner: userId }, contactData, { new: true });
     return updatedContact;
   } catch (error) {}
 };
