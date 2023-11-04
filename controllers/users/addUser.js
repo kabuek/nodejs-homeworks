@@ -1,6 +1,7 @@
 const User = require("../../models/user");
 const addUserSchema = require("../../schemas/addUserSchema");
 const bcrypt = require("bcrypt");
+const gravatar = require("gravatar");
 
 async function addUser(body) {
   const { email, password } = body;
@@ -8,9 +9,11 @@ async function addUser(body) {
   if (error) return { code: 400, data: error.details[0].message };
 
   const hashedPass = await bcrypt.hash(password, 10);
+  const userAvatar = gravatar.url(email, { protocol: "https", s: "100" });
   const newUserData = {
     email,
     password: hashedPass,
+    avatarURL: userAvatar,
   };
 
   try {
