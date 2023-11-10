@@ -12,6 +12,7 @@ async function login(body) {
   if (error) return { code: 400, data: error.details[0].message };
 
   const userData = await User.findOne({ email: email });
+  if (!userData.verify) return { code: 400, data: "Not found" };
   if (!userData) return { code: 401, data: "Email or password is wrong" };
 
   const compare = await bcrypt.compare(password, userData.password);

@@ -34,4 +34,14 @@ router.patch("/avatars", upload.single("avatar"), async (req, res, next) => {
   res.status(result.code).json(result.data);
 });
 
+router.get("/verify/:verificationToken", async (req, res, next) => {
+  const result = await userController.verifyToken(req.params.verificationToken);
+  res.status(result.code).json(result.data);
+});
+
+router.post("/verify", async (req, res, next) => {
+  const result = await userController.resendVerification(req.body);
+  res.status(result.code).json(result.data);
+});
+
 module.exports = router;
